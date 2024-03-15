@@ -6,13 +6,14 @@ import {getFirestore} from "firebase/firestore";
 // https://firebase.google.com/docs/web/setup#available-libraries
 
 // Your web app's Firebase configuration
-const firebaseConfig = {
-  apiKey: "AIzaSyAH3cNP8U4l0SYJH63nfNup1YmDPE0YUbs",
-  authDomain: "auth-firebase-3a177.firebaseapp.com",
-  projectId: "auth-firebase-3a177",
-  storageBucket: "auth-firebase-3a177.appspot.com",
-  messagingSenderId: "309527619421",
-  appId: "1:309527619421:web:a149ebefd32e7740e6aab4"
+// Coloque as informações suas aqui, apenas cuidado com a propagação das keys
+const firebaseConfig = { 
+  apiKey: "", 
+  authDomain: "", 
+  projectId: "",
+  storageBucket: "", 
+  messagingSenderId: "",
+  appId: "" 
 };
 
 // Initialize Firebase
