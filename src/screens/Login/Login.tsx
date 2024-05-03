@@ -1,36 +1,39 @@
 import React, { useState } from "react";
-import { StyleSheet, TextInput, Text, View, ActivityIndicator, Touchable, TouchableOpacity } from "react-native";
+import { StyleSheet, TextInput, Text, View, ActivityIndicator, TouchableOpacity } from "react-native";
+import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from "firebase/auth";
+import { useNavigation } from '@react-navigation/native';
 import { FIREBASE_AUTH } from "../../../firebaseConfig";
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { createUserWithEmailAndPassword} from "firebase/auth";
+
 
 const Login = () => {
-
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [loading, setLoading] = useState(false);
+    const [email, setEmail] = useState<string>('');
+    const [password, setPassword] = useState<string>('');
+    const [loading, setLoading] = useState<boolean>(false);
+    const navigation = useNavigation(); // Use o hook dentro do componente
 
     const auth = FIREBASE_AUTH;
 
     const handleLogin = async () => {
         setLoading(true);
-        try{
+        try {
             const authResponse = await signInWithEmailAndPassword(auth, email, password);
             console.log(authResponse);
-        } catch(error : any){
+            navigation.navigate('HomeScreen' as never); // Certifique-se de que o nome da rota está correto
+        } catch (error: any) { // Tipagem explícita para 'error' como 'any'
             console.error(error);
             alert('Erro de autenticação: ' + error.message);
         } finally {
             setLoading(false);
         }
     }
-
+    
     const handleNewAccount = async () => {
         setLoading(true);
-        try{
-            const ResponseCreate = await createUserWithEmailAndPassword(auth, email, password);
-            console.log(ResponseCreate);
-        } catch(error : any){
+        try {
+            const responseCreate = await createUserWithEmailAndPassword(auth, email, password);
+            console.log(responseCreate);
+            navigation.navigate('HomeScreen' as never); // Certifique-se de que o nome da rota está correto
+        } catch (error: any) { // Tipagem explícita para 'error' como 'any'
             console.error(error);
             alert('Erro de criação de conta: ' + error.message);
         } finally {
@@ -38,40 +41,39 @@ const Login = () => {
         }
     }
 
-
-    return(
-
+    return (
         <View style={styles.container}>
             <TextInput
-            style={styles.input}
-            placeholder="Email"
-            autoCapitalize="none"
-            value={email}
-            onChangeText={ (text) => setEmail(text)}
+                style={styles.input}
+                placeholder="Email"
+                autoCapitalize="none"
+                value={email}
+                onChangeText={(text) => setEmail(text)}
             />
 
             <TextInput
-            style={styles.input}
-            placeholder="Password"
-            autoCapitalize="none"
-            value={password}
-            onChangeText={ (text) => setPassword(text)}
-            secureTextEntry={true}
+                style={styles.input}
+                placeholder="Password"
+                autoCapitalize="none"
+                value={password}
+                onChangeText={(text) => setPassword(text)}
+                secureTextEntry={true}
             />
 
-            {loading ?
-             (<ActivityIndicator />) : 
-             (<View style={styles.buttonContainer}>
-                <TouchableOpacity style={styles.buttonClick} onPress={handleLogin}>
-                    <Text style={styles.buttonText}>Login</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.buttonClick} onPress={handleNewAccount}>
-                    <Text style={styles.buttonText}>Create account</Text>
-                </TouchableOpacity>
-            </View>)}
+            {loading ? (
+                <ActivityIndicator />
+            ) : (
+                <View style={styles.buttonContainer}>
+                    <TouchableOpacity style={styles.buttonClick} onPress={handleLogin}>
+                        <Text style={styles.buttonText}>Login</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.buttonClick} onPress={handleNewAccount}>
+                        <Text style={styles.buttonText}>Create account</Text>
+                    </TouchableOpacity>
+                </View>
+            )}
         </View>
     );
-
 }
 
 const styles = StyleSheet.create({
@@ -86,7 +88,7 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderRadius: 4,
         padding: 10,
-        backgroundColor: 'fff',
+        backgroundColor: '#fff',
     },
     buttonContainer: {
         flexDirection: 'row',
@@ -107,6 +109,5 @@ const styles = StyleSheet.create({
         textAlign: 'center'
     }
 });
-
 
 export default Login;
